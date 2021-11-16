@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
+import { Token } from './Token';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { share, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -13,12 +17,19 @@ export class SigninComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) { 
+    this.isLogin();
     this.buildForm();
+    
   }
 
   ngOnInit(): void {
+  }
+  private isLogin(){
+    localStorage.getItem("token") && this.router.navigate(['inicio']);
+
   }
   private buildForm() {
     this.form = this.formBuilder.group({
@@ -32,7 +43,15 @@ export class SigninComponent implements OnInit {
     if (this.form.valid) {
       const value = this.form.value;
       console.log(value); // cuando tengamos la api mandamos los datos en el body del post
-      this.http.post("http://localhost:3000/login", value).subscribe(value => console.log(JSON.stringify(value)));
+      let res: Observable<Token> =
+      this.http.post<Token>("http://localhost:3000/login", value)
+      .pipe(share());
+
+      res.subscribe(value => {
+        localStorage.setItem("token", value.token);
+        return this.router.navigate(['inicio']);
+
+      });
       
 
     } else {
@@ -42,10 +61,3 @@ export class SigninComponent implements OnInit {
   }
 
 }
-/*
-2018 0 Colombia agosto septiembre de 2019
-2019 21 
-2020 21 tome 7 cordoba enero 2021
-2021 tome 14 quedan 7 +4(pendientes)
-
-49*/
