@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -32,11 +33,15 @@ export class SignupComponent implements OnInit {
   }
 
   registro(event: Event) {
+    
     event.preventDefault();
     if (this.form.valid) {
       const value = this.form.value;
       console.log(value); // cuando tengamos la api mandamos los datos en el body del post
-      this.http.post("http://localhost:3000/registro", value).subscribe(value => console.log(JSON.stringify(value)));
+      
+      this.http.post("http://localhost:3000/registro", value)
+      .subscribe(value => console.log(JSON.stringify(value)));
+      
     } else {
       this.form.markAllAsTouched();
     }
