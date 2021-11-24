@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { AuthService } from '../_services/auth.service';
 
 
 @Component({
@@ -11,10 +11,13 @@ import { Observable } from 'rxjs';
 })
 export class SignupComponent implements OnInit {
   form: FormGroup | any;
+  signupFail : boolean = false;
+  message: string  ="Usuario resgistrado correctamente";
 
   constructor(
     private formBuilder: FormBuilder,
-    private http : HttpClient
+    private authService: AuthService,
+    private router: Router
   ) { 
     this.buildForm();
   }
@@ -26,24 +29,33 @@ export class SignupComponent implements OnInit {
       nombre: ['', [Validators.required]],
       apellido: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required,Validators.minLength(8)]],
       direccion: ['', [Validators.required]]
     });
 
   }
 
-  registro(event: Event) {
-    
+  registro(event: Event) {    
     event.preventDefault();
     if (this.form.valid) {
       const value = this.form.value;
       console.log(value); // cuando tengamos la api mandamos los datos en el body del post
       
-      this.http.post("http://localhost:3000/registro", value)
-      .subscribe(value => console.log(JSON.stringify(value)));
-      
+      this.authService.signup(value)
+      .subscribe( data => {
+        if(data.usuario){
+          localStorage.setItem('usuario', data.usuario);          
+          return this.router.navigate(['/login']);
+        }else {
+          this.signupFail = true;
+          return;
+        }
+
+      });
+
     } else {
       this.form.markAllAsTouched();
     }
   }
+  
 }

@@ -35,15 +35,15 @@ app.post('/login', (req, res) => {
     var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
     cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: function (result) {
-            console.log('access token + ' + result.getAccessToken().getJwtToken());
-            // console.log('id token + ' + result.getIdToken().getJwtToken());
+            // console.log('access token + ' + result.getAccessToken().getJwtToken());
+            // console.log('id token + ' + result.user.getName());
             // console.log('refresh token + ' + result.getRefreshToken().getToken());
             
             res.json({token: `${result.getAccessToken().getJwtToken()}` });
         },
         onFailure: function(err) {
             console.log(err);
-            res.json({error : `${err}`});
+            res.json({error : `${err.message}`});
         }
 
     });
@@ -61,11 +61,11 @@ app.post('/registro', (req, res) => {
     userPool.signUp(req.body.email, req.body.password, attributeList, null,
     function  (error, result){
         if (error) {
-            console.log(err);
-            return;
+            console.log(error);
+            res.json({error});
         }
         user = result.user;
-        console.log('user name is ' + result.user.getUsername());
+        console.log('user name is ' + result.user);
         res.json({ usuario: `${user.getUsername()}` })
         });
     
