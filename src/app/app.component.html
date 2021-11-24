@@ -1,11 +1,13 @@
 <!-- Toolbar -->
-<mat-toolbar color="primary" class="app-header">
- 
-  <span class="nav-tool-items">
-    <button mat-button routerLink="inicio" routerLinkActive="active">Inicio</button>
-    <button mat-button routerLink="login" routerLinkActive="active">Iniciar sesión</button>
-    <button mat-button mat-raised-button routerLink="registro" routerLinkActive="active">Registrarse</button>
-  </span>
+<mat-toolbar color="primary" class="app-header" layout-fill> 
+  <div class="md-toolbar-tools">
+    <button *ngIf="isLogIn" mat-button routerLink="inicio" routerLinkActive="active">Inicio</button>
+    <button mat-button *ngIf="user" class="example-spacer">{{user}}</button>
+    <span flex></span>
+    <button *ngIf="isLogIn" mat-button class="" (click)="Logout()">Cerrar sesión</button>
+    <button *ngIf="!isLogIn" mat-button routerLink="login" routerLinkActive="active">Iniciar sesión</button>
+    <button *ngIf="!isLogIn" mat-button mat-raised-button routerLink="registro" routerLinkActive="active">Registrarse</button>
+  </div>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

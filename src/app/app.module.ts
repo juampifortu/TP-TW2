@@ -11,8 +11,9 @@ import { AppComponent } from './app.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
+import { AuthService } from './_services/auth.service';
 
-import { LoginService } from "../service/login.service";
+
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import { LoginService } from "../service/login.service";
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [ LoginService ],
+  providers: [ AuthService ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
