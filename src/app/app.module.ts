@@ -4,7 +4,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AngularMaterialModule } from './angular-material.module';
+import { AngularMaterialModule } from '../model/angular-material.module';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -12,6 +12,9 @@ import { InicioComponent } from './inicio/inicio.component';
 import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
 import { AuthService } from './_services/auth.service';
+import { RepodbService } from './_services/repodb.service';
+import { CarritoComponent } from './carrito/carrito.component';
+import { PedidosService } from './_services/pedidos.service';
 
 
 
@@ -20,7 +23,8 @@ import { AuthService } from './_services/auth.service';
     AppComponent,
     SignupComponent,
     SigninComponent,
-    InicioComponent
+    InicioComponent,
+    CarritoComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +36,11 @@ import { AuthService } from './_services/auth.service';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [ AuthService ],
+  providers: [ 
+    AuthService,
+    RepodbService,
+    PedidosService 
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
