@@ -36,7 +36,9 @@
     color: white;
     font-weight: 600;
   }
-
+  .toolbar-name {
+    margin-left: 2em;
+  }
   .toolbar img {
     margin: 0 16px;
   }
@@ -260,6 +262,9 @@
     left: -230px;
     z-index: -10;
     width: 1920px;
+  }
+  .example-spacer {
+    flex: 1 1 auto;
   }
 
   /* Responsive Styles */

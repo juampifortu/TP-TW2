@@ -2,9 +2,13 @@ const express = require('express');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 const CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool;
 
+
 const cognito = require('./src/cognito');
 
 const AWS = require('aws-sdk');
+const { getPeliculas, 
+        addOrUpdatePeliculas,
+        deletePelicula } = require('./src/DynamoDb');
 
 global.fetch = require('node-fetch');
 
@@ -71,7 +75,52 @@ app.post('/registro', (req, res) => {
     
 });
 
+app.get('/peliculas', async (req, res) => {
+    try {
+        const peliculas = await getPeliculas();
+        res.status(200).json(peliculas.Items);
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ err : "Algo salio mal intentalo mas tarde"});
+    }
 
+});
+
+app.post('/pelicula/add', async (req, res) => {
+    const pelicula = req.body;
+    try {
+        const newPelicula = await addOrUpdatePeliculas(pelicula);
+        res.status(200).json(newPelicula);
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ err : "Algo salio mal intentalo mas tarde"});
+    }
+
+});
+app.post('/pelicula/:id', async (req, res) => {
+    const pelicula = req.body;
+    const {id} = req.params;
+    pelicula.id = id;
+    try {
+        const updatePelicula = await addOrUpdatePeliculas(pelicula);
+        res.status(200).json(updatePelicula);
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ err : "Algo salio mal intentalo mas tarde"});
+    }
+
+});
+
+app.delete('/pelicula/delete/:id', async (req, res) => {
+    const {id} = req.params;
+    try {        
+        res.status(200).json(await deletePelicula(id) + "ok");
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ err : "Algo salio mal intentalo mas tarde"});
+    }
+
+});
 app.listen(3000, () => {
     console.log('Example app listening on port 3000!')
 });
