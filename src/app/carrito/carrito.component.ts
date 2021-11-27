@@ -19,6 +19,8 @@ export class CarritoComponent implements OnInit {
 
   ngOnInit(): void {
     this.pedido = this.pedidoServicio.getPedido();
+    console.log(this.pedido);
+    
     this.total();
   }
   borrarPeli(id: number){
@@ -34,7 +36,5 @@ export class CarritoComponent implements OnInit {
       
     }
   }
-
-
 
 }
